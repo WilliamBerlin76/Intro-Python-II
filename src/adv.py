@@ -43,37 +43,38 @@ current_room = 'outside'
 explorer = Player('Gary', room['outside'])
 choices = ['n', 's', 'e', 'w']
 def blocked():
-    print('Path blocked! Try again...')
+    print('\nPath blocked! Try again...\n\n\n\n')
 # Write a loop that:
 while True:
     
 # * Prints the current room name
 # * Prints the current description (the textwrap module might be useful here).
-    print(f'\n      current location: ***{explorer.cur_room.location}*** \n\n      --{explorer.cur_room.description} ')
+    print(f'\n      current location: ***{explorer.cur_room.location}*** \n         **visible items: {explorer.cur_room.item_list}')
+    print(f'\n      --{explorer.cur_room.description} ')
    
 # * Waits for user input and decides what to do.
     cmd = input(" \nEnter cardinal direction to move (n, s, e, w, (q to quit)): ")
 
     if cmd == 'n':
-        print('(You proceed north...)')
+        print('\n\n\n(You proceed north...)\n\n\n\n\n')
         if hasattr(explorer.cur_room, 'n_to'):
             explorer.move(explorer.cur_room.n_to)
         else:
             blocked()  
     elif cmd == 's':
-        print('(You proceed south...)')
+        print('\n\n\n(You proceed south...)\n\n\n\n\n')
         if hasattr(explorer.cur_room, 's_to'):
             explorer.move(explorer.cur_room.s_to)
         else:
             blocked()
     elif cmd == 'e':
-        print('(You proceed east...)')
+        print('\n\n\n(You proceed east...)\n\n\n\n\n')
         if hasattr(explorer.cur_room, 'e_to'):
             explorer.move(explorer.cur_room.e_to)
         else:
             blocked()
     elif cmd == 'w':
-        print('(You proceed west...)')
+        print('\n\n\n(You proceed west...)\n\n\n\n\n')
         if hasattr(explorer.cur_room, 'w_to'):
             explorer.move(explorer.cur_room.w_to)
         else:
@@ -84,8 +85,6 @@ while True:
     else:
         print('invalid entry: please only use keys: n,s,e,w,q')
     
-    # print(explorer.cur_room)
-    # break
 #
 # If the user enters a cardinal direction, attempt to move to the room there.
 # Print an error message if the movement isn't allowed.

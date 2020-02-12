@@ -4,3 +4,11 @@ class Room:
     def __init__(self, location, description):
         self.location = location
         self.description = description
+        # the below attributes are defined in adv.py, but leaving this just in case
+        # self.n_to = None
+        # self.s_to = None
+        # self.e_to = None
+        # self.w_to = None
+        self.item_list = []
+    def add_item(self, item):
+        self.item_list.append(item)
