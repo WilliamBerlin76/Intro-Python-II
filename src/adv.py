@@ -1,5 +1,6 @@
 from room import Room
-
+# pylint throws error here, but imports work fine
+from player import Player
 # Declare all the rooms
 
 room = {
@@ -38,8 +39,10 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
-
+new_player = Player('Gary', room['outside'])
+print(new_player.name, new_player.cur_room.location)
 # Write a loop that:
+
 #
 # * Prints the current room name
 # * Prints the current description (the textwrap module might be useful here).
