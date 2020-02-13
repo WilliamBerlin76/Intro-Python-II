@@ -2,6 +2,7 @@ from room import Room
 # pylint throws error here, but imports work fine
 from player import Player
 from item import Item
+from item import LightSource
 # Declare all the rooms
 
 room = {
@@ -21,12 +22,18 @@ to north. The smell of gold permeates the air."""),
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
+    
+    'better_treasure': Room("Chamber of the Wise", """Congratulations, you were not fooled
+by the false chamber, and have been rewarded with the Wise Man's treasure! The walls are lined 
+with gold, and the room is filled with countless coins, chests, grails, and other
+treasures!""")
 }
 
 item = {
     'candles': Item("Candles", """These can light the way, but you need something to light them"""),
     'hatchet': Item('Hatchet', 'This could be used to chop something open...'),
     'flint': Item('Flint', 'Creates a spark, need something to keep the flame...'),
+    'burning-candle': LightSource('Burning-candle', 'You can see more clearly now with the light!!', 'flame'),
     'map': Item('Map', 'This map is old, weathered, and slightly transluscent.'),
     'glasses': Item('Glasses', 'Cracked lense, wearing them makes everything blurry')
 }
@@ -51,7 +58,7 @@ room['foyer'].add_item(item['hatchet'])
 room['overlook'].add_item(item['flint'])
 room['narrow'].add_item(item['map'])
 room['treasure'].add_item(item['glasses'])
-# Make a new player object that is currently in the 'outside' room.
+
 current_room = 'outside'
 explorer = Player('Gary', room['outside'])
 
@@ -85,18 +92,19 @@ while True:
     
     display_inv(explorer.inventory)
     
+        
+
     print('type q to quit')
     print('type i or "inventory" to see your inventory')
     print('Movement Controls: n,s,e,w = move north,south,east,west')
     print('Item Controls: type [get/drop] [item] with one space between to get or drop an item')
-# * Prints the current room name
-# * Prints the current description (the textwrap module might be useful here).
-    print(f'\n      current location: ***{explorer.cur_room.location}*** \n         **visible items: {visible_items}')
+
+    print(f'\n      **current location: ***{explorer.cur_room.location}*** \n         **visible items: {visible_items}')
     print(f'\n      --{explorer.cur_room.description} ')
     
-# * Waits for user input and decides what to do.
+
     cmd = input(" \nEnter command: ").lower().split(' ')
-    
+
     if cmd[0] in ['n', 's', 'e', 'w']:
         move_msg(cmd[0])
         explorer.move(cmd[0])
@@ -120,8 +128,14 @@ while True:
     else:
         print('invalid entry, refer to the movement and item controls')
     
-#
-# If the user enters a cardinal direction, attempt to move to the room there.
-# Print an error message if the movement isn't allowed.
-#
-# If the user enters "q", quit the game.
+    if 'candles' in invisible_inv and 'flint' in invisible_inv:
+        explorer.on_drop(item['candles'.lower()])
+        explorer.on_take(item['burning-candle'.lower()])
+        pop_index = invisible_inv.index('candles')
+        pop_vindex = visible_inv.index({"NAME": item['candles'].name.lower(), 'DESCRIPTION': item['candles'].description})
+        visible_inv.pop(pop_vindex)
+        invisible_inv.pop(pop_index)
+        print('\n\n\nYou use your flint, to light a candle \nYour flint is gone, but you now have a burning candle\n\n\n')
+        print(f'******** updated inventory: \n{visible_inv} \n\n')
+    
+
