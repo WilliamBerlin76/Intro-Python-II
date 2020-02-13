@@ -55,9 +55,16 @@ room['treasure'].add_item(item['glasses'])
 current_room = 'outside'
 explorer = Player('Gary', room['outside'])
 
+def move_msg(c):
+    direction = {
+        'n': 'north',
+        's': 'south',
+        'e': 'east',
+        'w': 'west'
+    }
+    print(f'\n\n\n(You proceed {direction[c]}...)\n\n\n\n\n')
 
-def blocked():
-    print('\nPath blocked! Try again...\n\n\n\n')
+
 # Write a loop that:
 while True:
     visible_items = []
@@ -88,33 +95,11 @@ while True:
     print(f'\n      --{explorer.cur_room.description} ')
     
 # * Waits for user input and decides what to do.
-    cmd = input(" \nEnter command: ").split(' ')
+    cmd = input(" \nEnter command: ").lower().split(' ')
     
-
-    if cmd[0] == 'n':
-        print('\n\n\n(You proceed north...)\n\n\n\n\n')
-        if hasattr(explorer.cur_room, 'n_to'):
-            explorer.move(explorer.cur_room.n_to)
-        else:
-            blocked()  
-    elif cmd[0] == 's':
-        print('\n\n\n(You proceed south...)\n\n\n\n\n')
-        if hasattr(explorer.cur_room, 's_to'):
-            explorer.move(explorer.cur_room.s_to)
-        else:
-            blocked()
-    elif cmd[0] == 'e':
-        print('\n\n\n(You proceed east...)\n\n\n\n\n')
-        if hasattr(explorer.cur_room, 'e_to'):
-            explorer.move(explorer.cur_room.e_to)
-        else:
-            blocked()
-    elif cmd[0] == 'w':
-        print('\n\n\n(You proceed west...)\n\n\n\n\n')
-        if hasattr(explorer.cur_room, 'w_to'):
-            explorer.move(explorer.cur_room.w_to)
-        else:
-            blocked()
+    if cmd[0] in ['n', 's', 'e', 'w']:
+        move_msg(cmd[0])
+        explorer.move(cmd[0])
     elif cmd[0] == 'q':
         print('Goodbye! Hope you had fun!')
         break

@@ -5,8 +5,12 @@ class Player:
         self.name = name
         self.cur_room = cur_room
         self.inventory = []
-    def move(self, new_room):
-        self.cur_room = new_room
+    def move(self, cmd):
+        next_room = getattr(self.cur_room, f'{cmd}_to')
+        if next_room != None:
+            self.cur_room = next_room
+        else:
+            print('\nPath blocked! Try again...\n\n\n\n')
     def on_take(self, item):
         self.inventory.append(item)
     def on_drop(self, item):
