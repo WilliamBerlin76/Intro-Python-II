@@ -3,6 +3,7 @@ from room import Room
 from player import Player
 from item import Item
 from item import LightSource
+from item import Treasure
 # Declare all the rooms
 
 room = {
@@ -34,7 +35,10 @@ item = {
     'flint': Item('Flint', 'Creates a spark, need something to keep the flame...'),
     'burning-candle': LightSource('Burning-candle', 'You can see more clearly now with the light!!', 'flame'),
     'map': Item('Map', 'This map is old, weathered, and slightly transluscent.'),
-    'glasses': Item('Glasses', 'Cracked lense, wearing them makes everything blurry')
+    'glasses': Item('Glasses', 'Cracked lense, wearing them makes everything blurry'),
+    'gold': Treasure('Gold', 'These look valuable!', False),
+    'grail': Treasure('Grail', 'Only the rich would drink from this', False),
+    'chest': Treasure('Chest', 'There must be something valuable inside', True)
 }
 
 
@@ -58,6 +62,9 @@ room['foyer'].add_item(item['hatchet'])
 room['overlook'].add_item(item['flint'])
 room['narrow'].add_item(item['map'])
 room['treasure'].add_item(item['glasses'])
+room['better_treasure'].add_item(item['gold'])
+room['better_treasure'].add_item(item['grail'])
+room['better_treasure'].add_item(item['chest'])
 
 current_room = 'outside'
 explorer = Player('Gary', room['outside'])
@@ -106,7 +113,27 @@ while True:
         room['overlook'].n_to = room['better_treasure']
         print("""\n         -- Where there was once just an empty chasm,
                 there is now a silver moonlit bridge leading to the north""")
+
+    if explorer.cur_room is room['treasure'] and 'burning-candle' in invisible_inv and 'map' in invisible_inv and 'glasses' in invisible_inv and 'hatchet' in invisible_inv:
+        explorer.on_drop(item['hatchet'])
+        explorer.cur_room.add_item(item['hatchet'])
+        print("""\n\nYou feel warmth emanating from the map...
+        
+        You pull out the map and put on the glasses.
+        An arrow appears on the map, pointing to an empty mount shaped for a hatchet,
+
+        You place the hatchet on the mount and hear a low rumble...
+        The entire cave shakes, then, silence...
+        """)
+    
+    if item['gold'] in explorer.inventory and item['grail'] in explorer.inventory and item['chest'] in explorer.inventory and explorer.complete == False:
+        print("\n\n         You have found the Wise Man;s Treasure!")
+        ccmd = input('          Do you wish to continue exploring?[y/n]: ')
+        explorer.on_continue(ccmd)
     cmd = input(" \nEnter command: ").lower().split(' ')
+
+    
+
 
     if cmd[0] in ['n', 's', 'e', 'w']:
         move_msg(cmd[0])
@@ -143,16 +170,6 @@ while True:
         print(f'******** candles in inventory replaced by: ***********\n{visible_inv[-1]} \n\n')
     
 
-    if explorer.cur_room is room['treasure'] and 'burning-candle' in invisible_inv and 'map' in invisible_inv and 'glasses' in invisible_inv and 'hatchet' in invisible_inv:
-        explorer.on_drop(item['hatchet'])
-        explorer.cur_room.add_item(item['hatchet'])
-        print("""You feel warmth emanating from the map...
-        
-        You pull out the map and put on the glasses.
-        An arrow appears on the map, pointing to an empty mount shaped for a hatchet,
-
-        You place the hatchet on the mount and hear a low rumble...
-        The entire cave shakes, then, silence...
-        """)
+    
     
     

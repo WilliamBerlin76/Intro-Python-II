@@ -4,6 +4,7 @@ class Player:
     def __init__(self, name, cur_room):
         self.name = name
         self.cur_room = cur_room
+        self.complete = False
         self.inventory = []
     def move(self, cmd):
         next_room = getattr(self.cur_room, f'{cmd}_to')
@@ -16,3 +17,9 @@ class Player:
     def on_drop(self, item):
         item_index = self.inventory.index(item)
         self.inventory.pop(item_index)
+    def on_continue(self, cmd):
+        if cmd.lower() == 'y':
+            self.complete = None
+        elif cmd.lower() == 'n':
+            print('Thank you for playing!')
+            exit()
