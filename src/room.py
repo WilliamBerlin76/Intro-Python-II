@@ -12,3 +12,6 @@ class Room:
         self.item_list = []
     def add_item(self, item):
         self.item_list.append(item)
+    def remove_item(self, item):
+        item_index = self.item_list.index(item)
+        self.item_list.pop(item_index)
