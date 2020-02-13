@@ -14,7 +14,7 @@ passages run north and east."""),
 
     'overlook': Room("Grand Overlook", """A steep cliff appears before you, falling
 into the darkness. Ahead to the north, a light flickers in
-the distance, but there is no way across the chasm."""),
+the distance."""),
 
     'narrow':   Room("Narrow Passage", """The narrow passage bends here from west
 to north. The smell of gold permeates the air."""),
@@ -112,7 +112,7 @@ while True:
         print('Goodbye! Hope you had fun!')
         break
     elif cmd[0] == 'i' or cmd[0] == 'inventory':
-        print(f'\n\n\n******** my inventory: \n{visible_inv} \n\n')
+        print(f'\n\n\n******** my inventory: ************\n{visible_inv} \n\n')
     elif cmd[0] == 'get' and cmd[1] != None:
         if cmd[1].lower() in visible_items:
             explorer.on_take(item[cmd[1].lower()])
@@ -135,7 +135,19 @@ while True:
         pop_vindex = visible_inv.index({"NAME": item['candles'].name.lower(), 'DESCRIPTION': item['candles'].description})
         visible_inv.pop(pop_vindex)
         invisible_inv.pop(pop_index)
-        print('\n\n\nYou use your flint, to light a candle \nYour flint is gone, but you now have a burning candle\n\n\n')
-        print(f'******** updated inventory: \n{visible_inv} \n\n')
+        display_inv(explorer.inventory)
+        print('\n\n\nYou use your flint, to light a candle\n\n\n')
+        print(f'******** candles in inventory replaced by: ***********\n{visible_inv[-1]} \n\n')
     
 
+    if explorer.cur_room is room['treasure'] and 'burning-candle' in invisible_inv and 'map' in invisible_inv and 'glasses' in invisible_inv and 'hatchet' in invisible_inv:
+        explorer.on_drop(item['hatchet'])
+        explorer.cur_room.add_item(item['hatchet'])
+        print("""You feel warmth emanating from the map...
+        
+        You pull out the map and put on the glasses.
+        An arrow appears on the map, pointing to an empty mount shaped for a hatchet,
+
+        You place the hatchet on the mount and hear a low rumble...
+        The entire cave shakes, then, silence...
+        """)
