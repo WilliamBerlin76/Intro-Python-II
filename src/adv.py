@@ -79,6 +79,7 @@ while True:
     display_inv(explorer.inventory)
     
     print('type q to quit')
+    print('type i or "inventory" to see your inventory')
     print('Movement Controls: n,s,e,w = move north,south,east,west')
     print('Item Controls: type [get/drop] [item] with one space between to get or drop an item')
 # * Prints the current room name
@@ -118,7 +119,7 @@ while True:
         print('Goodbye! Hope you had fun!')
         break
     elif cmd[0] == 'i' or cmd[0] == 'inventory':
-        print(f'\n\n\n******** my inventory: \n{visible_inv} ')
+        print(f'\n\n\n******** my inventory: \n{visible_inv} \n\n')
     elif cmd[0] == 'get' and cmd[1] != None:
         if cmd[1].lower() in visible_items:
             explorer.on_take(item[cmd[1].lower()])
