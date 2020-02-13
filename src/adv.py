@@ -1,6 +1,7 @@
 from room import Room
 # pylint throws error here, but imports work fine
 from player import Player
+from item import Item
 # Declare all the rooms
 
 room = {
@@ -22,6 +23,14 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
+item = {
+    'candles': Item("Candles", """These can light the way, but you need something to light them"""),
+    'hatchet': Item('Hatchet', 'This could be used to chop something open...'),
+    'flint': Item('Flint', 'Creates a spark, need something to keep the flame...'),
+    'map': Item('Map', 'This map is old, weathered, and slightly transluscent.'),
+    'glasses': Item('Glasses', 'Cracked lense, wearing them makes everything blurry')
+}
+
 
 # Link rooms together
 
@@ -37,25 +46,44 @@ room['treasure'].s_to = room['narrow']
 #
 # Main
 #
-room['outside'].add_item('candles')
-room['foyer'].add_item('hatchet')
-room['overlook'].add_item('flint')
-room['narrow'].add_item('map')
-room['treasure'].add_item('glasses')
+room['outside'].add_item(item['candles'])
+room['foyer'].add_item(item['hatchet'])
+room['overlook'].add_item(item['flint'])
+room['narrow'].add_item(item['map'])
+room['treasure'].add_item(item['glasses'])
 # Make a new player object that is currently in the 'outside' room.
 current_room = 'outside'
 explorer = Player('Gary', room['outside'])
-choices = ['n', 's', 'e', 'w']
+
+
 def blocked():
     print('\nPath blocked! Try again...\n\n\n\n')
 # Write a loop that:
 while True:
+    visible_items = []
+
+    def display_list(items):
+        for i in range(len(items)):
+            item = items[i].name.lower()
+            visible_items.append(item)
+    display_list(explorer.cur_room.item_list)
+    
+    visible_inv = []
+    invisible_inv = []
+    def display_inv(items):
+        for i in range(len(items)):
+            item = {"NAME": items[i].name.lower(), 'DESCRIPTION': items[i].description}
+            visible_inv.append(item)
+            invisible_inv.append(items[i].name.lower())
+    
+    display_inv(explorer.inventory)
+    
     print('type q to quit')
     print('Movement Controls: n,s,e,w = move north,south,east,west')
     print('Item Controls: type [get/drop] [item] with one space between to get or drop an item')
 # * Prints the current room name
 # * Prints the current description (the textwrap module might be useful here).
-    print(f'\n      current location: ***{explorer.cur_room.location}*** \n         **visible items: {explorer.cur_room.item_list}')
+    print(f'\n      current location: ***{explorer.cur_room.location}*** \n         **visible items: {visible_items}')
     print(f'\n      --{explorer.cur_room.description} ')
     
 # * Waits for user input and decides what to do.
@@ -90,17 +118,17 @@ while True:
         print('Goodbye! Hope you had fun!')
         break
     elif cmd[0] == 'i' or cmd[0] == 'inventory':
-        print(f'\n\n\n******** my inventory: {explorer.inventory} **************')
+        print(f'\n\n\n******** my inventory: \n{visible_inv} ')
     elif cmd[0] == 'get' and cmd[1] != None:
-        if cmd[1] in explorer.cur_room.item_list:
-            explorer.on_take(cmd[1])
-            explorer.cur_room.remove_item(cmd[1])
+        if cmd[1].lower() in visible_items:
+            explorer.on_take(item[cmd[1].lower()])
+            explorer.cur_room.remove_item(item[cmd[1].lower()])
         else:
             print('\n\n\nThat item is not in this room!\n\n\n')
     elif cmd[0] == 'drop' and cmd[1] != None:
-        if cmd[1] in explorer.inventory:
-            explorer.on_drop(cmd[1])
-            explorer.cur_room.add_item(cmd[1])
+        if cmd[1].lower() in invisible_inv:
+            explorer.on_drop(item[cmd[1].lower()])
+            explorer.cur_room.add_item(item[cmd[1].lower()])
         else:
             print('\n\n\nYou do not have that item!\n\n\n')
     else:
