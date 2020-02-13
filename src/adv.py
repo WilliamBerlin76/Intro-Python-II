@@ -25,8 +25,7 @@ earlier adventurers. The only exit is to the south."""),
     
     'better_treasure': Room("Chamber of the Wise", """Congratulations, you were not fooled
 by the false chamber, and have been rewarded with the Wise Man's treasure! The walls are lined 
-with gold, and the room is filled with countless coins, chests, grails, and other
-treasures!""")
+with gold. Here is where the true treasure resides""")
 }
 
 item = {
@@ -49,6 +48,7 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+room['better_treasure'].s_to = room['overlook']
 
 #
 # Main
@@ -102,7 +102,10 @@ while True:
     print(f'\n      **current location: ***{explorer.cur_room.location}*** \n         **visible items: {visible_items}')
     print(f'\n      --{explorer.cur_room.description} ')
     
-
+    if explorer.cur_room is room['overlook'] and item['hatchet'] in room['treasure'].item_list:
+        room['overlook'].n_to = room['better_treasure']
+        print("""\n         -- Where there was once just an empty chasm,
+                there is now a silver moonlit bridge leading to the north""")
     cmd = input(" \nEnter command: ").lower().split(' ')
 
     if cmd[0] in ['n', 's', 'e', 'w']:
@@ -151,3 +154,5 @@ while True:
         You place the hatchet on the mount and hear a low rumble...
         The entire cave shakes, then, silence...
         """)
+    
+    
