@@ -13,5 +13,5 @@ class Treasure(Item):
     def __init__(self, name, description, concealed):
         super().__init__(name, description)
         self.concealed = concealed
-    def open(self, item):
+    def open(self):
         self.concealed = False

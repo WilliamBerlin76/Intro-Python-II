@@ -114,7 +114,7 @@ while True:
         print("""\n         -- Where there was once just an empty chasm,
                 there is now a silver moonlit bridge leading to the north""")
 
-    if explorer.cur_room is room['treasure'] and 'burning-candle' in invisible_inv and 'map' in invisible_inv and 'glasses' in invisible_inv and 'hatchet' in invisible_inv:
+    if explorer.cur_room is room['treasure'] and 'burning-candle' in invisible_inv and 'map' in invisible_inv and 'glasses' in invisible_inv and 'hatchet' in invisible_inv and item['chest'] not in explorer.inventory:
         explorer.on_drop(item['hatchet'])
         explorer.cur_room.add_item(item['hatchet'])
         print("""\n\nYou feel warmth emanating from the map...
@@ -127,9 +127,24 @@ while True:
         """)
     
     if item['gold'] in explorer.inventory and item['grail'] in explorer.inventory and item['chest'] in explorer.inventory and explorer.complete == False:
-        print("\n\n         You have found the Wise Man;s Treasure!")
-        ccmd = input('          Do you wish to continue exploring?[y/n]: ')
+        print("\n\n         You have found the Wise Man's Treasure!")
+        ccmd = input('         Do you wish to continue exploring?[y/n]: ')
         explorer.on_continue(ccmd)
+
+    if item['hatchet'] in explorer.inventory and item['chest'] in explorer.inventory:
+        print("""\n\n      You take your hatchet and chop the lock off of the treasure chest.
+
+        you peer inside and find the treasure inside to be nearly blinding!
+        You have finally found the TRUE Wise Man's Treasure""")
+        item['chest'].open()
+    
+    if item['chest'].concealed == False:
+        print("""\n\n\n        Congratulations on completing the game!!!
+        
+        Only the wise can find the real treasure!!!""")
+        ccmd = input('      Do you wish to continue exploring? [y/n]: ')
+        explorer.on_continue(ccmd)
+
     cmd = input(" \nEnter command: ").lower().split(' ')
 
     
@@ -166,7 +181,7 @@ while True:
         visible_inv.pop(pop_vindex)
         invisible_inv.pop(pop_index)
         display_inv(explorer.inventory)
-        print('\n\n\nYou use your flint, to light a candle\n\n\n')
+        print('\n\n\nYou use your flint to light a candle\n\n\n')
         print(f'******** candles in inventory replaced by: ***********\n{visible_inv[-1]} \n\n')
     
 
