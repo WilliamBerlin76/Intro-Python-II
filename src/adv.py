@@ -165,7 +165,7 @@ while True:
         else:
             print('\n\n\nThat item is not in this room!\n\n\n')
     elif cmd[0] == 'drop' and cmd[1] != None:
-        if cmd[1].lower() in invisible_inv:
+        if item[cmd[1]] in explorer.inventory:
             explorer.on_drop(item[cmd[1].lower()])
             explorer.cur_room.add_item(item[cmd[1].lower()])
         else:
